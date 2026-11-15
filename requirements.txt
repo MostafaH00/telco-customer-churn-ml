@@ -1,0 +1,8 @@
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+jupyter
+ipykernel
+great_expectations==1.25.0
