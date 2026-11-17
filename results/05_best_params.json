@@ -1,0 +1,18 @@
+{
+    "XGBoost": {
+        "n_estimators": 150,
+        "max_depth": 2,
+        "learning_rate": 0.08315510161972098,
+        "subsample": 0.7996257787814657,
+        "colsample_bytree": 0.6353718081178203,
+        "min_child_weight": 3
+    },
+    "GradientBoosting": {
+        "n_estimators": 150,
+        "learning_rate": 0.02655331725728516,
+        "max_depth": 4,
+        "min_samples_leaf": 1,
+        "subsample": 0.7103454500437947,
+        "max_features": 0.7384072304692317
+    }
+}

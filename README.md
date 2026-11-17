@@ -23,3 +23,14 @@ Matplotlib, Seaborn, MLflow, FastAPI, Docker
 ## Project Status
 
 In development
+
+
+### Experiment Tracking with MLflow
+
+Hyperparameter optimization was conducted using Optuna (TPE),
+with 50 trials per model and Stratified 5-fold cross-validation.
+
+MLflow tracked 100 optimization runs, recording hyperparameters,
+Average Precision, ROC-AUC, and cross-validation variability.
+
+![MLflow Experiment Tracking](figures/mlflow/experiment_tracking.png)

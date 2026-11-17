@@ -24,3 +24,9 @@ models/*.joblib
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Local MLflow and Optuna storage
+mlflow.db
+optuna_studies.db
+mlruns/
+mlartifacts/
