@@ -5,6 +5,9 @@
 # Python cache
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
 
 # Jupyter
 .ipynb_checkpoints/
@@ -19,6 +22,9 @@ data/processed/
 # Trained models
 models/*.pkl
 models/*.joblib
+
+# Include the final production model
+!models/final_churn_model.joblib
 
 # IDE and OS files
 .vscode/
