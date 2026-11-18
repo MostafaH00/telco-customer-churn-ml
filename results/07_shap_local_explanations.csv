@@ -1,0 +1,21 @@
+case,customer_index,feature,shap_value,direction
+TP,6623,tenure,1.0569798,Increases churn risk
+TP,6623,Contract_Month-to-month,0.40994745,Increases churn risk
+TP,6623,TotalCharges,0.36125672,Increases churn risk
+TP,6623,InternetService_Fiber optic,0.2732237,Increases churn risk
+TP,6623,OnlineSecurity_No,0.22206849,Increases churn risk
+FP,2927,tenure,0.9740458,Increases churn risk
+FP,2927,Contract_Month-to-month,0.40515146,Increases churn risk
+FP,2927,TotalCharges,0.36048698,Increases churn risk
+FP,2927,InternetService_Fiber optic,0.28643948,Increases churn risk
+FP,2927,OnlineSecurity_No,0.21485357,Increases churn risk
+FN,6972,Contract_Month-to-month,-0.5732408,Decreases churn risk
+FN,6972,tenure,-0.49386826,Decreases churn risk
+FN,6972,MonthlyCharges,0.4435919,Increases churn risk
+FN,6972,InternetService_Fiber optic,0.2112861,Increases churn risk
+FN,6972,PaymentMethod_Electronic check,0.20233434,Increases churn risk
+TN,3117,Contract_Month-to-month,-0.5670741,Decreases churn risk
+TN,3117,MonthlyCharges,0.44842917,Increases churn risk
+TN,3117,tenure,-0.428677,Decreases churn risk
+TN,3117,InternetService_Fiber optic,0.2112861,Increases churn risk
+TN,3117,PaymentMethod_Electronic check,0.20233434,Increases churn risk
