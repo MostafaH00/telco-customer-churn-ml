@@ -6,6 +6,9 @@ from fastapi import FastAPI
 from app.predictor import load_model, predict_customer
 from app.schemas import CustomerFeatures, ChurnPrediction
 
+import gradio as gr
+
+from app.gradio_ui import demo
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -56,3 +59,10 @@ def model_info():
 def predict(customer: CustomerFeatures):
     """Predict churn probability for one customer."""
     return predict_customer(customer)
+
+# Mount the Gradio interface on the existing FastAPI app
+app = gr.mount_gradio_app(
+    app,
+    demo,
+    path="/gradio",
+)
