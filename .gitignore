@@ -36,3 +36,6 @@ mlflow.db
 optuna_studies.db
 mlruns/
 mlartifacts/
+
+# Temporary project files
+project_structure.txt

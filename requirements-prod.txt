@@ -1,0 +1,19 @@
+
+# Data processing
+numpy==2.5.4
+pandas==3.1.1
+
+# Machine learning inference
+scikit-learn==1.9.1
+xgboost==3.4.1
+imbalanced-learn==0.14.2
+joblib==1.6.0
+
+# REST API
+fastapi==0.163.1
+uvicorn[standard]==0.54.0
+pydantic==2.14.3
+
+# Web interface
+gradio==6.32.0
+requests==2.34.2

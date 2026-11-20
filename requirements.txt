@@ -26,6 +26,10 @@ fastapi
 uvicorn[standard]
 pydantic
 
+# Web interface
+gradio
+requests
+
 # Testing
 pytest
 httpx

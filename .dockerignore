@@ -1,0 +1,46 @@
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Git
+.git/
+.gitignore
+
+# Development configuration
+.vscode/
+.idea/
+.env
+.env.*
+!.env.example
+
+# Notebooks and ML experiments
+notebooks/
+**/mlruns/
+mlflow.db
+optuna_studies.db
+
+# Datasets and intermediate artifacts
+data/
+results/
+
+# Visualizations and reports
+figures/
+reports/
+
+# Tests
+tests/
+.coverage
+htmlcov/
+
+# Other files
+project_structure.txt
+.DS_Store
+Thumbs.db
