@@ -34,14 +34,34 @@ jobs:
       - name: Run pytest
         run: python -m pytest -q tests/
 
+ 
   docker-build:
-    name: Build Docker Image
+    name: Build and Publish Docker Image
     needs: tests
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Build Docker image
-        run: docker build -t telco-churn:ci .
+      - name: Login to GHCR
+        if: github.event_name == 'push'
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: ${{ github.event_name == 'push' }}
+          tags: ghcr.io/mostafah00/telco-customer-churn-ml:sha-${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/MostafaH00/telco-customer-churn-ml
+
