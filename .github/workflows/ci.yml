@@ -96,23 +96,33 @@ jobs:
 
       - name: Verify deployment health
         run: |
+          EXPECTED_IMAGE="ghcr.io/mostafah00/telco-customer-churn-ml:sha-${{ github.sha }}"
+          HEALTH_URL="https://telco-churn-app.nicehill-20e3b8d0.francecentral.azurecontainerapps.io/health"
+
           for attempt in {1..20}; do
-            READY=$(az containerapp show \
+            echo "Health check attempt $attempt/20"
+
+            IMAGE=$(az containerapp show \
               --name telco-churn-app \
               --resource-group rg-telco-churn \
-              --query "properties.latestReadyRevisionName" -o tsv)
+              --query "properties.template.containers[?name=='telco-churn-app'].image | [0]" \
+              -o tsv)
 
-            LATEST=$(az containerapp show \
-              --name telco-churn-app \
-              --resource-group rg-telco-churn \
-              --query "properties.latestRevisionName" -o tsv)
+            echo "Expected image: $EXPECTED_IMAGE"
+            echo "Configured image: $IMAGE"
 
-            if [ -n "$LATEST" ] && [ "$READY" = "$LATEST" ]; then
-              curl --fail --silent --show-error \
-                --max-time 60 \
-                https://telco-churn-app.nicehill-20e3b8d0.francecentral.azurecontainerapps.io/health \
-                | jq -e '.status == "healthy" and .model_loaded == true' \
-                && exit 0
+            if [ "$IMAGE" = "$EXPECTED_IMAGE" ]; then
+              if RESPONSE=$(curl --fail --silent --show-error \
+                --max-time 60 "$HEALTH_URL"); then
+
+                echo "Health response: $RESPONSE"
+
+                if echo "$RESPONSE" | jq -e \
+                  '.status == "healthy" and .model_loaded == true'; then
+                  echo "Deployment health verification passed."
+                  exit 0
+                fi
+              fi
             fi
 
             sleep 15
