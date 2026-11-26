@@ -1,5 +1,4 @@
-
-name: CI - Telco Customer Churn
+name: CI/CD - Telco Customer Churn
 
 on:
   push:
@@ -10,6 +9,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: telco-churn-${{ github.ref }}
+  cancel-in-progress: false
+  
 jobs:
   tests:
     name: Run Python Tests
@@ -64,4 +67,56 @@ jobs:
           tags: ghcr.io/mostafah00/telco-customer-churn-ml:sha-${{ github.sha }}
           labels: |
             org.opencontainers.image.source=https://github.com/MostafaH00/telco-customer-churn-ml
+    
+  deploy:
+    name: Deploy to Azure Container Apps
+    needs: docker-build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy Docker image
+        run: |
+          az containerapp update \
+            --name telco-churn-app \
+            --resource-group rg-telco-churn \
+            --container-name telco-churn-app \
+            --image ghcr.io/mostafah00/telco-customer-churn-ml:sha-${{ github.sha }}
+
+      - name: Verify deployment health
+        run: |
+          for attempt in {1..20}; do
+            READY=$(az containerapp show \
+              --name telco-churn-app \
+              --resource-group rg-telco-churn \
+              --query "properties.latestReadyRevisionName" -o tsv)
+
+            LATEST=$(az containerapp show \
+              --name telco-churn-app \
+              --resource-group rg-telco-churn \
+              --query "properties.latestRevisionName" -o tsv)
+
+            if [ -n "$LATEST" ] && [ "$READY" = "$LATEST" ]; then
+              curl --fail --silent --show-error \
+                --max-time 60 \
+                https://telco-churn-app.nicehill-20e3b8d0.francecentral.azurecontainerapps.io/health \
+                | jq -e '.status == "healthy" and .model_loaded == true' \
+                && exit 0
+            fi
+
+            sleep 15
+          done
+
+          echo "Deployment health verification failed."
+          exit 1
